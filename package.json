@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "description": "dev-only tooling: headless screenshots, and the SVG rasteriser used by the texture pipeline",
+  "scripts": {
+    "shot": "node tools/shot_scene.js index.html docs/on-screen.jpg",
+    "textures": "python3 tools/build_assets.py assets/perfboard_topview.svg && python3 tools/shrink_assets.py && python3 build.py"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
+}

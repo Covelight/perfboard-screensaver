@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The single-file build: .NET Framework 4.8, which ships with Windows 10 1903+
+    and Windows 11. No runtime to install, no apphost, no packer - one .scr of
+    about 2 MB with everything inside it.
+
+    The WebView2 managed assemblies and the native loader are embedded as
+    resources and served by Bootstrap.cs, so the .scr is genuinely one file.
+  -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>PerfboardSaver</AssemblyName>
+    <RootNamespace>PerfboardSaver</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>1.2.0</Version>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <RestorePackagesPath Condition="'$(RestorePackagesPath)'==''">$(NUGET_PACKAGES)</RestorePackagesPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\PerfboardSaver\Program.cs" Link="Program.cs" />
+    <Compile Include="..\PerfboardSaver\SettingsForm.cs" Link="SettingsForm.cs" />
+    <Compile Include="..\PerfboardSaver\Bootstrap.cs" Link="Bootstrap.cs" />
+    <!-- the whole scene, exactly as built by build.py -->
+    <EmbeddedResource Include="..\..\index.html" LogicalName="scene.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- the in-box parts of .NET Framework we use -->
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- the three non-framework dependencies, embedded so the .scr can stand alone -->
+  <ItemGroup>
+    <EmbeddedResource Include="$(PkgMicrosoft_Web_WebView2)\lib\net462\Microsoft.Web.WebView2.Core.dll"
+                      LogicalName="Microsoft.Web.WebView2.Core.dll" />
+    <EmbeddedResource Include="$(PkgMicrosoft_Web_WebView2)\lib\net462\Microsoft.Web.WebView2.WinForms.dll"
+                      LogicalName="Microsoft.Web.WebView2.WinForms.dll" />
+    <EmbeddedResource Include="$(PkgMicrosoft_Web_WebView2)\runtimes\win-x64\native\WebView2Loader.dll"
+                      LogicalName="WebView2Loader.dll" />
+  </ItemGroup>
+
+</Project>

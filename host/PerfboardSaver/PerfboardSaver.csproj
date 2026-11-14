@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- lets the Linux sandbox cross-build a Windows binary -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>PerfboardSaver</AssemblyName>
+    <RootNamespace>PerfboardSaver</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <Version>1.2.0</Version>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- plain `dotnet publish` gives the small framework-dependent folder; the
+         66 MB self-extracting variant is opt-in from build.ps1 -SelfContained -->
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>false</PublishSingleFile>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2592.51" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- the whole scene, exactly as built by build.py -->
+    <EmbeddedResource Include="..\..\index.html" LogicalName="scene.html" />
+  </ItemGroup>
+
+</Project>
